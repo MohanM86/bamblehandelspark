@@ -742,38 +742,120 @@ img{display:block;max-width:100%}
 /* ══════════════════════════════════════
    MILJØ
 ══════════════════════════════════════ */
-#miljo{display:grid;grid-template-columns:5fr 7fr;min-height:700px}
-.miljo-l{
-  padding:7rem 5rem 7rem 3.5vw;
-  display:flex;flex-direction:column;justify-content:center;
-  border-right:1px solid var(--RULE);
-  background:var(--G2);
+/* Header */
+.miljo-hdr {
+  padding: 6rem 3.5vw 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: end;
+  border-bottom: 1px solid var(--RULE);
 }
-.miljo-l p{font-size:.9rem;font-weight:400;line-height:1.9;color:rgba(255,255,255,.35);max-width:420px}
-.miljo-r{
-  display:grid;grid-template-columns:1fr 1fr;
-  background:var(--B);
+.miljo-p {
+  font-size: .9rem; font-weight:400; line-height:1.9;
+  color: rgba(255,255,255,.38); max-width:480px;
 }
-.mq{
-  padding:4rem 3.5rem;
-  border-right:1px solid var(--RULE);
-  border-bottom:1px solid var(--RULE);
-  display:flex;flex-direction:column;justify-content:flex-end;
-  min-height:240px;position:relative;
-  transition:background .3s;
+/* Stats */
+.miljo-stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  border-bottom: 1px solid var(--RULE);
 }
-.mq:hover{background:var(--G2)}
-.mq:nth-child(2n){border-right:none}
-.mq:nth-child(3),.mq:nth-child(4){border-bottom:none}
-.mq-icon{
-  position:absolute;top:2.5rem;left:3.5rem;
-  width:36px;height:36px;opacity:.35;
-  transition:opacity .3s;
+.miljo-stats .bc { border-right: 1px solid var(--RULE); }
+.miljo-stats .bc:last-child { border-right: none; }
+/* Overview image */
+.miljo-overview {
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--RULE);
+  background: var(--B);
 }
-.mq:hover .mq-icon{opacity:.7}
-.mq-n{font-family:'Anton',sans-serif;font-size:2.8rem;line-height:1;color:#fff;margin-bottom:.4rem}
-.mq-t{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.25rem}
-.mq-d{font-size:.78rem;font-weight:400;color:rgba(255,255,255,.25)}
+.miljo-overview-img {
+  width: 100%; height: 55vmin; min-height: 280px;
+  object-fit: contain; display: block;
+}
+.miljo-overview-label {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.75) 0%, transparent 55%);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 5vw;
+}
+.miljo-overview-kicker {
+  font-size: .58rem; font-weight: 700; letter-spacing: .4em;
+  text-transform: uppercase; color: rgba(255,255,255,.4);
+  margin-bottom: .8rem;
+}
+.miljo-overview-n {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.6rem, 4.5vw, 4.5rem);
+  line-height: .95; color: #fff; letter-spacing: .02em;
+}
+/* 4-image grid */
+.miljo-grid4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--RULE);
+}
+.miljo-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 16/9;
+  background: var(--B);
+}
+.miljo-card-img {
+  width: 100%; height: 100%;
+  object-fit: contain; display: block;
+  transition: transform 6s var(--E);
+}
+.miljo-card:hover .miljo-card-img { transform: scale(1.04); }
+.miljo-card-label {
+  position: absolute; inset: 0;
+  padding: 1.5rem;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: linear-gradient(transparent 50%, rgba(0,0,0,.9));
+}
+.miljo-card-cat {
+  font-size: .55rem; font-weight: 700; letter-spacing: .25em;
+  text-transform: uppercase; color: rgba(255,255,255,.4);
+  margin-bottom: .3rem;
+}
+.miljo-card-n {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 2rem);
+  color: #fff; line-height: 1;
+}
+
+/* ── MOBILE overrides ── */
+@media(max-width:900px) {
+  .miljo-hdr {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 4rem 1.5rem 3rem;
+  }
+  .miljo-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .miljo-stats .bc:nth-child(2) { border-right: none; }
+  .miljo-stats .bc:nth-child(3) { border-right: 1px solid var(--RULE); }
+  .miljo-stats .bc { border-bottom: 1px solid var(--RULE); }
+  .miljo-stats .bc:nth-child(3),
+  .miljo-stats .bc:nth-child(4) { border-bottom: none; }
+  .miljo-overview-img { height: 50vw; min-height: 200px; }
+  .miljo-overview-label {
+    background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 60%);
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+  .miljo-overview-n { font-size: clamp(1.4rem, 6vw, 2.4rem); }
+}
+@media(max-width:600px) {
+  .miljo-stats { grid-template-columns: 1fr 1fr; }
+  .miljo-stats .bc { padding: 2rem 1.5rem; }
+  .miljo-stats .bc .bc-n { font-size: 2rem; }
+  .miljo-grid4 { grid-template-columns: 1fr; }
+  .miljo-card { aspect-ratio: 4/3; }
+  .miljo-card-n { font-size: 1.4rem; }
+  .miljo-overview-img { height: 56vw; }
+}
 
 /* ══════════════════════════════════════
    BELIGGENHET
@@ -927,9 +1009,9 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
    RESPONSIVE
 ══════════════════════════════════════ */
 @media(max-width:1100px){
-  #om,#miljo,#beliggenhet,.k-hero,.k-form-wrap{grid-template-columns:1fr}
+  #om,#beliggenhet,.k-hero,.k-form-wrap{grid-template-columns:1fr}
   .om-r{min-height:50vw}
-  .miljo-r{grid-template-columns:1fr 1fr}
+
   .band{grid-template-columns:1fr 1fr}
   .sc6{grid-column:span 12}
   .sc4{grid-column:span 6}
@@ -943,9 +1025,9 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
   #nav{padding:0 1.5rem}.nlinks{display:none}
   #hero{padding:0 1.5rem 4rem}.hero-statrow{flex-wrap:wrap}.hs{padding:1rem 1.5rem}
   .band{grid-template-columns:1fr}
-  .om-l,.miljo-l,.bel-l{padding:4rem 1.5rem}
+  .om-l,.bel-l{padding:4rem 1.5rem}
   .om-feats{grid-template-columns:1fr}
-  .miljo-r{grid-template-columns:1fr}.mq{border-right:none!important}
+
   .store-hdr{flex-direction:column;align-items:flex-start}
   #butikker{padding:4rem 1.5rem}
   .sc4,.sc3{grid-column:span 12}
@@ -981,7 +1063,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
 
 <!-- ════ HERO ════ -->
 <section id="hero">
-  <div style="position:absolute;inset:0;z-index:0;background:url('5.png') center/cover no-repeat;opacity:.12;filter:grayscale(100%)"></div>
+  <div style="position:absolute;inset:0;z-index:0;background:url('1.png') center/cover no-repeat;opacity:.12;filter:grayscale(100%)"></div>
   <div class="hero-rules">
     <span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span>
@@ -1079,7 +1161,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
     </div>
   </div>
   <div class="om-r rv rvr">
-    <img src="5.png" alt="Langrønningen oversikt — Bamble Handelspark med solceller på alle tak" style="object-fit:contain;object-position:center"/>
+    <img src="1.png" alt="Langrønningen oversikt — Bamble Handelspark med solceller på alle tak" style="object-fit:contain;object-position:center"/>
     <div class="om-r-badge">
       <div class="om-r-badge-n">10</div>
       <div class="om-r-badge-l">Etablerte aktører</div>
@@ -1275,83 +1357,81 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
 <section id="miljo" style="background:var(--B)">
 
   <!-- Text header -->
-  <div style="padding:7rem 3.5vw 5rem;display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:end;border-bottom:1px solid var(--RULE)" class="rv">
+  <div class="miljo-hdr rv">
     <div>
       <div class="slabel"><div class="slabel-bar"></div>Miljø &amp; bærekraft</div>
       <h2 class="sh">Skandinavias mest energi&shy;vennlige handelspark</h2>
     </div>
     <div>
-      <p style="font-size:.9rem;font-weight:400;line-height:1.9;color:rgba(255,255,255,.38);max-width:480px">Bamble Handelspark setter nye standarder for bærekraftig næringsutvikling. Totalt <strong style="color:rgba(255,255,255,.7)">1 970 solcellepaneler</strong> planlegges installert fordelt på fire bygg. Flere bygninger BREEAM-NOR sertifisert med brønnparker og solcelleanlegg. Megaflis er det første varehuset med mål om PLUSS-bygg-status.</p>
+      <p class="miljo-p">Bamble Handelspark setter nye standarder for bærekraftig næringsutvikling. Totalt <strong style="color:rgba(255,255,255,.7)">1 970 solcellepaneler</strong> planlegges installert fordelt på fire bygg. Flere bygninger BREEAM-NOR sertifisert med brønnparker og solcelleanlegg. Megaflis er det første varehuset med mål om PLUSS-bygg-status.</p>
     </div>
   </div>
 
   <!-- Stats row -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--RULE)">
-    <div class="bc rv" style="border-right:1px solid var(--RULE)">
+  <div class="miljo-stats">
+    <div class="bc rv">
       <div class="bc-n">1 970</div>
-      <div class="bc-t">Solcellepaneler totalt</div>
-      <div class="bc-d">Fordelt på fire bygg på Langrønningen</div>
+      <div class="bc-t">Solcellepaneler</div>
+      <div class="bc-d">Fordelt på fire bygg</div>
     </div>
-    <div class="bc rv d1" style="border-right:1px solid var(--RULE)">
+    <div class="bc rv d1">
       <div class="bc-n">PLUSS</div>
-      <div class="bc-t">Energibygg-ambisjon</div>
-      <div class="bc-d">Produserer mer energi enn det bruker</div>
+      <div class="bc-t">Energibygg</div>
+      <div class="bc-d">Produserer mer enn det bruker</div>
     </div>
-    <div class="bc rv d2" style="border-right:1px solid var(--RULE)">
+    <div class="bc rv d2">
       <div class="bc-n">BREEAM</div>
       <div class="bc-t">Sertifisering</div>
-      <div class="bc-d">Internasjonalt miljøklassifiseringssystem</div>
+      <div class="bc-d">Internasjonalt miljøklassifisering</div>
     </div>
     <div class="bc rv d3">
       <div class="bc-n">→ 0</div>
       <div class="bc-t">CO₂-mål</div>
-      <div class="bc-d">Ambisjon om karbonnøytral drift</div>
+      <div class="bc-d">Karbonnøytral drift</div>
     </div>
   </div>
 
   <!-- Full-width overview image -->
-  <div style="position:relative;overflow:hidden;border-bottom:1px solid var(--RULE)" class="rv">
-    <img src="5.png" alt="Langrønningen oversikt — 1970 solcellepaneler" style="width:100%;height:60vmin;object-fit:contain;display:block"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.7) 0%,transparent 50%);display:flex;align-items:center;padding:0 5vw">
-      <div>
-        <div style="font-size:.58rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.8rem">Langrønningen — oversikt</div>
-        <div style="font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;color:#fff;letter-spacing:.02em">TOTALT<br>1 970<br>PANELER</div>
-      </div>
+  <div class="miljo-overview rv">
+    <img src="1.png" alt="Langrønningen oversikt — 1970 solcellepaneler" class="miljo-overview-img"/>
+    <div class="miljo-overview-label">
+      <div class="miljo-overview-kicker">Langrønningen — oversikt</div>
+      <div class="miljo-overview-n">TOTALT<br>1 970<br>PANELER</div>
     </div>
   </div>
 
   <!-- 4-image grid -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--RULE)">
+  <div class="miljo-grid4">
 
-    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv">
-      <img src="4.png" alt="Megaflis — 698 solcellepaneler" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform 6s"/>
-      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
-        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 2 · Megaflis</div>
-        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">698 paneler</div>
+    <div class="miljo-card rv">
+      <img src="4.png" alt="Megaflis — 698 solcellepaneler" class="miljo-card-img"/>
+      <div class="miljo-card-label">
+        <div class="miljo-card-cat">Bygg 2 · Megaflis</div>
+        <div class="miljo-card-n">698 paneler</div>
       </div>
     </div>
 
-    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d1">
-      <img src="3.png" alt="Elkjøp / JYSK — 674 solcellepaneler" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform 6s"/>
-      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
-        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 3 · Elkjøp &amp; JYSK</div>
-        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">674 paneler</div>
+    <div class="miljo-card rv d1">
+      <img src="3.png" alt="Elkjøp / JYSK — 674 solcellepaneler" class="miljo-card-img"/>
+      <div class="miljo-card-label">
+        <div class="miljo-card-cat">Bygg 3 · Elkjøp &amp; JYSK</div>
+        <div class="miljo-card-n">674 paneler</div>
       </div>
     </div>
 
-    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d2">
-      <img src="2.png" alt="Byggmax — 458 solcellepaneler" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform 6s"/>
-      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
-        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 4 · Byggmax</div>
-        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">458 paneler</div>
+    <div class="miljo-card rv d2">
+      <img src="2.png" alt="Byggmax — 458 solcellepaneler" class="miljo-card-img"/>
+      <div class="miljo-card-label">
+        <div class="miljo-card-cat">Bygg 4 · Byggmax</div>
+        <div class="miljo-card-n">458 paneler</div>
       </div>
     </div>
 
-    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d3">
-      <img src="1.png" alt="thansen — 140 solcellepaneler" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform 6s"/>
-      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
-        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 5 · thansen</div>
-        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">140 paneler</div>
+    <div class="miljo-card rv d3">
+      <img src="1.png" alt="thansen — 140 solcellepaneler" class="miljo-card-img"/>
+      <div class="miljo-card-label">
+        <div class="miljo-card-cat">Bygg 5 · thansen</div>
+        <div class="miljo-card-n">140 paneler</div>
       </div>
     </div>
 
