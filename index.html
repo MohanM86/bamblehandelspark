@@ -643,6 +643,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
 
 <!-- ════ HERO ════ -->
 <section id="hero">
+  <div style="position:absolute;inset:0;z-index:0;background:url('5.jpg') center/cover no-repeat;opacity:.12;filter:grayscale(100%)"></div>
   <div class="hero-rules">
     <span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span>
@@ -740,7 +741,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
     </div>
   </div>
   <div class="om-r rv rvr">
-    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=85" alt="Bamble Handelspark"/>
+    <img src="5.jpg" alt="Langrønningen oversikt — Bamble Handelspark med solceller på alle tak" style="object-position:center 20%"/>
     <div class="om-r-badge">
       <div class="om-r-badge-n">10</div>
       <div class="om-r-badge-l">Etablerte aktører</div>
@@ -797,7 +798,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
       <div class="sc-name">Biltema</div>
       <div class="sc-sub">Alt til bil, MC, båt, sport og hjem</div>
       <div class="sc-hr"></div>
-      <div class="sc-addr"><strong>Langrønningen 2</strong>, 3967 Stathelle · bamble@biltema.com</div>
+      <div class="sc-addr"><strong>Langrønningen 2</strong>, 3967 Stathelle · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5436353936383114363d38203139357a373b39">[email&#160;protected]</a></div>
       <div class="hours">
         <span class="hd">Man–Fre</span><span class="ht">08:00–20:00</span>
         <span class="hd">Lørdag</span><span class="ht">09:00–18:00</span>
@@ -933,50 +934,89 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
 </section>
 
 <!-- ════ MILJØ ════ -->
-<section id="miljo">
-  <div class="miljo-l rv rvl">
-    <div class="slabel"><div class="slabel-bar"></div>Miljø &amp; bærekraft</div>
-    <h2 class="sh">Skandinavias mest energivennlige handelspark</h2>
-    <br>
-    <p>Bamble Handelspark setter nye standarder for bærekraftig næringsutvikling. Flere bygninger planlegges BREEAM-NOR sertifisert med brønnparker og solcelleanlegg. Megaflis er det første varehuset med mål om å bli et PLUSS-bygg — som produserer mer energi enn det bruker.</p>
+<section id="miljo" style="background:var(--B)">
+
+  <!-- Text header -->
+  <div style="padding:7rem 3.5vw 5rem;display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:end;border-bottom:1px solid var(--RULE)" class="rv">
+    <div>
+      <div class="slabel"><div class="slabel-bar"></div>Miljø &amp; bærekraft</div>
+      <h2 class="sh">Skandinavias mest energi&shy;vennlige handelspark</h2>
+    </div>
+    <div>
+      <p style="font-size:.9rem;font-weight:400;line-height:1.9;color:rgba(255,255,255,.38);max-width:480px">Bamble Handelspark setter nye standarder for bærekraftig næringsutvikling. Totalt <strong style="color:rgba(255,255,255,.7)">1 970 solcellepaneler</strong> planlegges installert fordelt på fire bygg. Flere bygninger BREEAM-NOR sertifisert med brønnparker og solcelleanlegg. Megaflis er det første varehuset med mål om PLUSS-bygg-status.</p>
+    </div>
   </div>
-  <div class="miljo-r rv rvr">
-    <!-- Solar -->
-    <div class="mq">
-      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round">
-        <circle cx="18" cy="18" r="6"/><line x1="18" y1="4" x2="18" y2="8"/><line x1="18" y1="28" x2="18" y2="32"/><line x1="4" y1="18" x2="8" y2="18"/><line x1="28" y1="18" x2="32" y2="18"/><line x1="7.8" y1="7.8" x2="10.6" y2="10.6"/><line x1="25.4" y1="25.4" x2="28.2" y2="28.2"/><line x1="28.2" y1="7.8" x2="25.4" y2="10.6"/><line x1="10.6" y1="25.4" x2="7.8" y2="28.2"/>
-      </svg>
-      <div class="mq-n">PLUSS</div>
-      <div class="mq-t">Energibygg</div>
-      <div class="mq-d">Produserer mer energi enn det bruker</div>
+
+  <!-- Stats row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--RULE)">
+    <div class="bc rv" style="border-right:1px solid var(--RULE)">
+      <div class="bc-n">1 970</div>
+      <div class="bc-t">Solcellepaneler totalt</div>
+      <div class="bc-d">Fordelt på fire bygg på Langrønningen</div>
     </div>
-    <!-- Leaf -->
-    <div class="mq">
-      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 30c0-12 6-20 18-22 0 12-6 20-18 22z"/><path d="M6 30c4-4 8-8 14-12"/>
-      </svg>
-      <div class="mq-n">BREEAM</div>
-      <div class="mq-t">Sertifisering</div>
-      <div class="mq-d">Internasjonalt miljøklassifiseringssystem</div>
+    <div class="bc rv d1" style="border-right:1px solid var(--RULE)">
+      <div class="bc-n">PLUSS</div>
+      <div class="bc-t">Energibygg-ambisjon</div>
+      <div class="bc-d">Produserer mer energi enn det bruker</div>
     </div>
-    <!-- EV bolt -->
-    <div class="mq">
-      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 4L10 20h10L15 32"/><path d="M28 10v5M30.5 12.5h-5" stroke-width="2"/>
-      </svg>
-      <div class="mq-n">100%</div>
-      <div class="mq-t">El-lading</div>
-      <div class="mq-d">Hurtiglading for alle besøkende</div>
+    <div class="bc rv d2" style="border-right:1px solid var(--RULE)">
+      <div class="bc-n">BREEAM</div>
+      <div class="bc-t">Sertifisering</div>
+      <div class="bc-d">Internasjonalt miljøklassifiseringssystem</div>
     </div>
-    <!-- Recycle arrows -->
-    <div class="mq">
-      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6l4 7h-8l4-7z"/><path d="M28 24l-4-7 4-7"/><path d="M8 24l4-7-4-7"/><path d="M14 30h8M10 28l4 2-2 4"/><path d="M26 28l-4 2 2 4"/>
-      </svg>
-      <div class="mq-n">→ 0</div>
-      <div class="mq-t">CO₂-mål</div>
-      <div class="mq-d">Ambisjon om karbonnøytral drift</div>
+    <div class="bc rv d3">
+      <div class="bc-n">→ 0</div>
+      <div class="bc-t">CO₂-mål</div>
+      <div class="bc-d">Ambisjon om karbonnøytral drift</div>
     </div>
+  </div>
+
+  <!-- Full-width overview image -->
+  <div style="position:relative;overflow:hidden;border-bottom:1px solid var(--RULE)" class="rv">
+    <img src="5.jpg" alt="Langrønningen oversikt — 1970 solcellepaneler" style="width:100%;height:60vmin;object-fit:cover;object-position:center 30%;display:block;filter:brightness(.75)"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.7) 0%,transparent 50%);display:flex;align-items:center;padding:0 5vw">
+      <div>
+        <div style="font-size:.58rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.8rem">Langrønningen — oversikt</div>
+        <div style="font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,4.5rem);line-height:.95;color:#fff;letter-spacing:.02em">TOTALT<br>1 970<br>PANELER</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-image grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--RULE)">
+
+    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv">
+      <img src="4.jpg" alt="Megaflis — 698 solcellepaneler" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.65);transition:transform 6s,filter 1s"/>
+      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
+        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 2 · Megaflis</div>
+        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">698 paneler</div>
+      </div>
+    </div>
+
+    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d1">
+      <img src="3.jpg" alt="Elkjøp / JYSK — 674 solcellepaneler" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.65);transition:transform 6s,filter 1s"/>
+      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
+        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 3 · Elkjøp &amp; JYSK</div>
+        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">674 paneler</div>
+      </div>
+    </div>
+
+    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d2">
+      <img src="2.jpg" alt="Byggmax — 458 solcellepaneler" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.65);transition:transform 6s,filter 1s"/>
+      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
+        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 4 · Byggmax</div>
+        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">458 paneler</div>
+      </div>
+    </div>
+
+    <div style="position:relative;overflow:hidden;aspect-ratio:16/9" class="rv d3">
+      <img src="1.jpg" alt="thansen — 140 solcellepaneler" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.65);transition:transform 6s,filter 1s"/>
+      <div style="position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 40%,rgba(0,0,0,.85))">
+        <div style="font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem">Bygg 5 · thansen</div>
+        <div style="font-family:'Anton',sans-serif;font-size:2rem;color:#fff;line-height:1">140 paneler</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1147,7 +1187,7 @@ footer{background:var(--G2);border-top:1px solid var(--RULE)}
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Cursor
 const dot=document.getElementById('dot'),ring=document.getElementById('ring');
 let mx=-100,my=-100,rx=-100,ry=-100;
@@ -1169,10 +1209,4 @@ const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>60),{passive:true});
 
 // Reveal
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}});
-},{threshold:.08});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-</script>
-</body>
-</html>
+const io=new Intersecti
