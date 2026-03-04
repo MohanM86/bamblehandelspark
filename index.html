@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bamble Handelspark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --W:#FFFFFF;
+  --B:#000000;
+  --G:#0A0A0A;
+  --G2:#111111;
+  --G3:#1A1A1A;
+  --DIM:#666666;
+  --RULE:rgba(255,255,255,.07);
+  --ACC:#FFFFFF;
+  --E:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Syne',sans-serif;
+  background:var(--B);
+  color:var(--W);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  cursor:none;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:'Syne',sans-serif;cursor:none;border:none;background:none}
+img{display:block;max-width:100%}
+
+/* ── CURSOR ── */
+#dot{position:fixed;width:6px;height:6px;background:#fff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#ring{position:fixed;width:28px;height:28px;border:1px solid rgba(255,255,255,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .06s linear}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;z-index:9000;
+  background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
+  transition:opacity .8s var(--E),visibility .8s;
+}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.load-title{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(3rem,10vw,8rem);
+  letter-spacing:.04em;
+  line-height:.9;
+  text-align:center;
+}
+.load-title span{display:block;overflow:hidden}
+.load-title span i{display:block;animation:rise .7s var(--E) both;font-style:normal}
+.load-title span:nth-child(2) i{animation-delay:.1s;color:#fff;opacity:.3}
+.load-title span:nth-child(3) i{animation-delay:.2s}
+@keyframes rise{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.load-bar{width:160px;height:1px;background:rgba(255,255,255,.1);overflow:hidden}
+.load-fill{height:100%;width:0;background:#fff;animation:fill 1.5s var(--E) forwards}
+@keyframes fill{to{width:100%}}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3.5vw;
+  transition:background .4s,border-color .4s;
+  border-bottom:1px solid transparent;
+}
+#nav.on{background:rgba(0,0,0,.96);backdrop-filter:blur(20px);border-bottom-color:var(--RULE)}
+.nlogo{
+  font-family:'Anton',sans-serif;
+  font-size:1.1rem;letter-spacing:.08em;
+  display:flex;flex-direction:column;gap:2px;
+}
+.nlogo-a{line-height:1}
+.nlogo-b{font-family:'Syne',sans-serif;font-size:.5rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.nlinks{display:flex;align-items:center;gap:3rem}
+.nlinks a{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);transition:color .2s;position:relative}
+.nlinks a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:#fff;transition:width .3s var(--E)}
+.nlinks a:hover{color:#fff}
+.nlinks a:hover::after{width:100%}
+.ncta{
+  border:1px solid rgba(255,255,255,.25);
+  padding:.5rem 1.6rem;font-size:.65rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  transition:border-color .2s,color .2s,background .2s;
+}
+.ncta:hover{border-color:#fff;color:#000;background:#fff}
+.ncta::after{display:none!important}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+#hero{
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 3.5vw 6rem;
+}
+/* animated noise texture */
+#hero::before{
+  content:'';
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 70% at 75% 50%,rgba(255,255,255,.025),transparent 60%),
+    #000;
+}
+/* giant ruled lines */
+.hero-rules{
+  position:absolute;inset:0;z-index:0;
+  display:grid;grid-template-columns:repeat(12,1fr);
+  pointer-events:none;
+}
+.hero-rules span{border-right:1px solid rgba(255,255,255,.03)}
+/* huge BG text */
+.hero-bg-text{
+  position:absolute;
+  font-family:'Anton',sans-serif;
+  font-size:clamp(14rem,28vw,30rem);
+  letter-spacing:-.02em;
+  line-height:.85;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:rgba(255,255,255,.022);
+  white-space:nowrap;
+  user-select:none;pointer-events:none;
+  z-index:0;
+}
+/* vertical rule accent */
+.hero-vline{
+  position:absolute;top:0;right:22%;
+  width:1px;height:100%;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.12) 20%,rgba(255,255,255,.12) 80%,transparent 100%);
+  z-index:0;
+}
+.hero-content{position:relative;z-index:1}
+.hero-kicker{
+  display:flex;align-items:center;gap:1.2rem;
+  margin-bottom:2.5rem;
+  animation:fadeUp .9s 1.9s var(--E) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-kicker-line{width:48px;height:1px;background:rgba(255,255,255,.4)}
+.hero-kicker span{font-size:.6rem;font-weight:700;letter-spacing:.45em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.hero-h1{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(5rem,13.5vw,16rem);
+  line-height:.88;
+  letter-spacing:-.005em;
+  margin-bottom:4rem;
+  overflow:hidden;
+}
+.hero-h1 .line{
+  display:block;overflow:hidden;
+}
+.hero-h1 .line span{
+  display:block;
+  animation:rise .9s var(--E) both;
+}
+.hero-h1 .line:nth-child(1) span{animation-delay:2s}
+.hero-h1 .line:nth-child(2) span{animation-delay:2.1s;color:rgba(255,255,255,.18)}
+.hero-h1 .line:nth-child(3) span{animation-delay:2.2s}
+.hero-bottom{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:3rem;flex-wrap:wrap;
+  animation:fadeUp .9s 2.4s var(--E) both;
+}
+.hero-desc{
+  max-width:400px;font-size:.9rem;font-weight:400;
+  line-height:1.85;color:rgba(255,255,255,.38);
+  padding-left:1.5rem;
+  border-left:1px solid rgba(255,255,255,.15);
+}
+.hero-statrow{display:flex}
+.hs{padding:1.5rem 2.5rem;border-left:1px solid var(--RULE);text-align:right}
+.hs:first-child{border-left:none}
+.hsn{font-family:'Anton',sans-serif;font-size:3rem;line-height:1;color:#fff;letter-spacing:-.01em}
+.hsl{font-size:.55rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:.3rem}
+/* scroll indicator */
+.hero-scroll{
+  position:absolute;right:3.5vw;bottom:4rem;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:.8rem;
+  animation:fadeUp .9s 2.7s var(--E) both;
+}
+.hs-track{width:1px;height:70px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+.hs-track::after{
+  content:'';position:absolute;top:0;left:0;width:100%;height:40%;
+  background:#fff;
+  animation:scrollDrop 2s ease-in-out infinite;
+}
+@keyframes scrollDrop{0%{top:-50%}100%{top:130%}}
+.hero-scroll span{font-size:.5rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.2)}
+
+/* ══════════════════════════════════════
+   TICKER
+══════════════════════════════════════ */
+.ticker{
+  height:52px;overflow:hidden;
+  background:#fff;
+  display:flex;align-items:center;
+}
+.ticker-track{
+  display:flex;white-space:nowrap;
+  animation:tick 30s linear infinite;
+}
+.ticker-track span{
+  font-family:'Syne',sans-serif;
+  font-size:.65rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:#000;padding:0 2.5rem;
+}
+.ticker-track .sep{padding:0 .5rem;color:rgba(0,0,0,.25);letter-spacing:0;font-size:.7rem}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════
+   FACTS BAND
+══════════════════════════════════════ */
+.band{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--RULE);
+}
+.bc{
+  padding:4rem 3rem;
+  border-right:1px solid var(--RULE);
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.bc:last-child{border-right:none}
+.bc::after{
+  content:'';position:absolute;left:0;top:0;
+  height:100%;width:2px;
+  background:#fff;
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform .5s var(--E);
+}
+.bc:hover{background:var(--G2)}
+.bc:hover::after{transform:scaleY(1)}
+.bc-n{
+  font-family:'Anton',sans-serif;
+  font-size:3.8rem;line-height:1;color:#fff;
+  margin-bottom:.5rem;letter-spacing:-.01em;
+}
+.bc-t{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem}
+.bc-d{font-size:.8rem;font-weight:400;color:rgba(255,255,255,.25);line-height:1.55}
+
+/* ══════════════════════════════════════
+   OM PARKEN
+══════════════════════════════════════ */
+#om{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:80vh;
+}
+.om-l{
+  padding:7rem 5rem 7rem 3.5vw;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--RULE);
+}
+.slabel{
+  display:flex;align-items:center;gap:.9rem;
+  font-size:.58rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+  margin-bottom:1.8rem;
+}
+.slabel-bar{width:22px;height:1px;background:rgba(255,255,255,.3)}
+.sh{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.5rem,4.5vw,4.5rem);
+  line-height:.95;letter-spacing:.01em;
+  color:#fff;margin-bottom:2.5rem;
+}
+.om-l p{
+  font-size:.9rem;font-weight:400;line-height:1.9;
+  color:rgba(255,255,255,.38);max-width:440px;
+  margin-bottom:1.2rem;
+}
+/* feature icons */
+.om-feats{
+  margin-top:3rem;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--RULE);
+  border:1px solid var(--RULE);
+}
+.omf{
+  padding:1.5rem;background:var(--B);
+  display:flex;flex-direction:column;gap:.8rem;
+  transition:background .25s;
+}
+.omf:hover{background:var(--G2)}
+.omf-icon{width:32px;height:32px;opacity:.7}
+.omf-t{font-size:.78rem;font-weight:700;color:#fff}
+.omf-d{font-size:.73rem;font-weight:400;color:rgba(255,255,255,.3);line-height:1.5}
+.om-r{
+  position:relative;overflow:hidden;
+}
+.om-r img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(100%) brightness(.6);
+  transition:transform 7s var(--E),filter 1s;
+}
+#om:hover .om-r img{transform:scale(1.04);filter:grayscale(80%) brightness(.7)}
+.om-r-badge{
+  position:absolute;bottom:3rem;left:3rem;
+  background:#fff;
+  padding:1.8rem 2rem;
+}
+.om-r-badge-n{font-family:'Anton',sans-serif;font-size:3rem;color:#000;line-height:1}
+.om-r-badge-l{font-size:.58rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(0,0,0,.5);margin-top:.3rem}
+
+/* ══════════════════════════════════════
+   STORES
+══════════════════════════════════════ */
+#butikker{padding:7rem 3.5vw;background:var(--B)}
+.store-hdr{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:5rem;padding-bottom:3rem;
+  border-bottom:1px solid var(--RULE);
+  gap:2rem;flex-wrap:wrap;
+}
+.store-hdr-note{max-width:360px;font-size:.85rem;font-weight:400;color:rgba(255,255,255,.3);line-height:1.8}
+/* grid */
+.sg{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--RULE)}
+.sc{
+  background:var(--B);padding:2.8rem;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.sc:hover{background:var(--G2)}
+.sc::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:1px;background:#fff;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--E);
+}
+.sc:hover::before{transform:scaleX(1)}
+.sc6{grid-column:span 6}
+.sc4{grid-column:span 4}
+.sc3{grid-column:span 3}
+.sc12{
+  grid-column:span 12;
+  display:grid;grid-template-columns:2fr 1.5fr 2fr;
+  padding:0;
+}
+.sc12-col{padding:2.8rem;border-right:1px solid var(--RULE)}
+.sc12-col:last-child{border-right:none}
+.sc-num{
+  font-family:'Anton',sans-serif;
+  font-size:5rem;line-height:1;color:rgba(255,255,255,.04);
+  position:absolute;top:1.2rem;right:1.5rem;
+  letter-spacing:-.02em;user-select:none;
+}
+.sc-cat{
+  font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-bottom:1rem;
+}
+.sc-name{
+  font-family:'Anton',sans-serif;
+  font-size:2.2rem;letter-spacing:.02em;color:#fff;
+  line-height:1;margin-bottom:.4rem;
+}
+.sc-sub{font-size:.75rem;font-weight:400;color:rgba(255,255,255,.28);margin-bottom:1.8rem;font-style:italic}
+.sc-hr{height:1px;background:var(--RULE);margin-bottom:1.8rem}
+.sc-addr{font-size:.77rem;font-weight:400;color:rgba(255,255,255,.32);line-height:1.7;margin-bottom:1.4rem}
+.sc-addr strong{color:rgba(255,255,255,.65);font-weight:600}
+.hours{display:grid;grid-template-columns:1fr auto;gap:.3rem 1.2rem}
+.hd{font-size:.73rem;font-weight:400;color:rgba(255,255,255,.28)}
+.ht{font-size:.73rem;font-weight:700;color:rgba(255,255,255,.7);text-align:right}
+.ht.c{color:rgba(255,255,255,.18);font-weight:400;font-style:italic}
+/* live badge */
+.live{
+  display:inline-flex;align-items:center;gap:.55rem;
+  margin-top:1.2rem;
+  border:1px solid rgba(255,255,255,.15);
+  padding:.38rem .9rem;
+  width:fit-content;
+}
+.live-dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:bl 1.6s ease infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
+.live-txt{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem}
+.chip{
+  font-size:.6rem;font-weight:600;
+  color:rgba(255,255,255,.28);
+  border:1px solid rgba(255,255,255,.08);
+  padding:.2rem .75rem;
+  letter-spacing:.05em;
+  transition:border-color .2s,color .2s;
+}
+.sc:hover .chip{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
+
+/* ══════════════════════════════════════
+   MILJØ
+══════════════════════════════════════ */
+#miljo{display:grid;grid-template-columns:5fr 7fr;min-height:700px}
+.miljo-l{
+  padding:7rem 5rem 7rem 3.5vw;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--RULE);
+  background:var(--G2);
+}
+.miljo-l p{font-size:.9rem;font-weight:400;line-height:1.9;color:rgba(255,255,255,.35);max-width:420px}
+.miljo-r{
+  display:grid;grid-template-columns:1fr 1fr;
+  background:var(--B);
+}
+.mq{
+  padding:4rem 3.5rem;
+  border-right:1px solid var(--RULE);
+  border-bottom:1px solid var(--RULE);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:240px;position:relative;
+  transition:background .3s;
+}
+.mq:hover{background:var(--G2)}
+.mq:nth-child(2n){border-right:none}
+.mq:nth-child(3),.mq:nth-child(4){border-bottom:none}
+.mq-icon{
+  position:absolute;top:2.5rem;left:3.5rem;
+  width:36px;height:36px;opacity:.35;
+  transition:opacity .3s;
+}
+.mq:hover .mq-icon{opacity:.7}
+.mq-n{font-family:'Anton',sans-serif;font-size:2.8rem;line-height:1;color:#fff;margin-bottom:.4rem}
+.mq-t{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.25rem}
+.mq-d{font-size:.78rem;font-weight:400;color:rgba(255,255,255,.25)}
+
+/* ══════════════════════════════════════
+   BELIGGENHET
+══════════════════════════════════════ */
+#beliggenhet{display:grid;grid-template-columns:1fr 1fr;min-height:700px;background:var(--G)}
+.bel-l{
+  padding:7rem 5rem 7rem 3.5vw;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--RULE);
+}
+.bel-l>p{font-size:.9rem;font-weight:400;line-height:1.9;color:rgba(255,255,255,.35);max-width:420px;margin-bottom:3rem}
+.bl-list{display:flex;flex-direction:column}
+.bli{
+  display:grid;grid-template-columns:7rem 1fr;gap:1.5rem;align-items:center;
+  padding:1.7rem 0;border-bottom:1px solid var(--RULE);
+  transition:padding-left .3s var(--E);
+}
+.bli:first-child{border-top:1px solid var(--RULE)}
+.bli:hover{padding-left:.5rem}
+.bli-n{font-family:'Anton',sans-serif;font-size:2rem;line-height:1;color:#fff}
+.bli-t{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.2rem}
+.bli-d{font-size:.85rem;font-weight:400;color:rgba(255,255,255,.55)}
+.bel-r{position:relative;overflow:hidden}
+.bel-r iframe{position:absolute;inset:0;width:100%;height:100%;border:none;filter:grayscale(100%) invert(1) brightness(.85)}
+.map-strip{
+  position:absolute;bottom:0;left:0;right:0;z-index:2;
+  background:linear-gradient(transparent,rgba(0,0,0,.98));
+  padding:4rem 3rem 2rem;
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.map-strip span{font-size:.58rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.map-strip strong{font-family:'Anton',sans-serif;font-size:1.1rem;letter-spacing:.06em}
+
+/* ══════════════════════════════════════
+   KONTAKT
+══════════════════════════════════════ */
+#kontakt{background:var(--B)}
+.k-hero{
+  background:#fff;
+  color:#000;
+  padding:6rem 3.5vw;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+  position:relative;overflow:hidden;
+}
+.k-hero::after{
+  content:'KONTAKT';
+  position:absolute;right:-2%;top:50%;transform:translateY(-50%);
+  font-family:'Anton',sans-serif;
+  font-size:clamp(8rem,20vw,18rem);
+  color:rgba(0,0,0,.04);letter-spacing:-.02em;line-height:1;
+  user-select:none;pointer-events:none;
+}
+.k-hero .slabel-bar{background:rgba(0,0,0,.3)}
+.k-hero .slabel{color:rgba(0,0,0,.35)}
+.k-hero .sh{color:#000}
+.k-hero p{font-size:.93rem;font-weight:400;color:rgba(0,0,0,.5);line-height:1.85;max-width:440px}
+.k-facts{display:flex;flex-direction:column}
+.k-row{
+  display:grid;grid-template-columns:9rem 1fr;
+  padding:1.3rem 0;border-bottom:1px solid rgba(0,0,0,.08);
+}
+.k-row:first-child{border-top:1px solid rgba(0,0,0,.08)}
+.k-lbl{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.35);display:flex;align-items:center}
+.k-val{font-size:.9rem;font-weight:400;color:rgba(0,0,0,.7)}
+/* form wrap */
+.k-form-wrap{
+  padding:6rem 3.5vw;
+  display:grid;grid-template-columns:1.3fr 1fr;
+  gap:6rem;align-items:start;
+}
+.k-form-title{font-family:'Anton',sans-serif;font-size:3rem;color:#fff;letter-spacing:.02em;line-height:.95;margin-bottom:.5rem}
+.k-form-sub{font-size:.82rem;font-weight:400;color:rgba(255,255,255,.3);margin-bottom:3rem}
+.kform{display:flex;flex-direction:column;gap:1.8rem}
+.kfr{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.kfg{display:flex;flex-direction:column;gap:.6rem}
+.kflabel{font-size:.58rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.kfinput{
+  width:100%;background:transparent;
+  border:none;border-bottom:1px solid rgba(255,255,255,.12);
+  padding:.85rem 0;
+  font-family:'Syne',sans-serif;font-size:.9rem;font-weight:400;color:#fff;
+  outline:none;transition:border-color .3s;
+}
+.kfinput:focus{border-bottom-color:#fff}
+.kfinput::placeholder{color:rgba(255,255,255,.2)}
+.kfsel{-webkit-appearance:none;appearance:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.3)'/%3E%3C/svg%3E") no-repeat right 0 center}
+.kfsel option{background:#111;color:#fff}
+.kfta{resize:none;min-height:90px}
+.k-btn{
+  background:#fff;color:#000;
+  padding:1.1rem 3.2rem;
+  font-family:'Anton',sans-serif;
+  font-size:1rem;letter-spacing:.12em;
+  display:inline-flex;align-items:center;gap:.8rem;
+  transition:background .25s,color .25s,transform .2s;
+  align-self:flex-start;
+}
+.k-btn:hover{background:rgba(255,255,255,.85);transform:translateY(-2px)}
+.k-btn svg{width:18px;height:18px;transition:transform .2s}
+.k-btn:hover svg{transform:translateX(4px)}
+/* right info */
+.kinfo{display:flex;flex-direction:column;gap:2.5rem}
+.ki-lbl{font-size:.55rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:.4rem}
+.ki-big{font-family:'Anton',sans-serif;font-size:1.6rem;color:#fff;line-height:1}
+.ki-val{font-size:.88rem;font-weight:400;color:rgba(255,255,255,.45);line-height:1.6}
+.ki-rule{height:1px;background:var(--RULE)}
+.ki-list{display:flex;flex-direction:column;gap:1rem;margin-top:.5rem}
+.ki-li{
+  display:grid;grid-template-columns:32px 1fr;gap:1rem;align-items:start;
+}
+.ki-li-icon{width:28px;height:28px;opacity:.5;flex-shrink:0}
+.ki-li-text{font-size:.82rem;font-weight:400;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{background:var(--G2);border-top:1px solid var(--RULE)}
+.foot-top{
+  padding:5rem 3.5vw 4rem;
+  display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:4rem;
+  border-bottom:1px solid var(--RULE);
+}
+.f-logo{font-family:'Anton',sans-serif;font-size:1.5rem;letter-spacing:.06em;color:#fff;line-height:1;margin-bottom:.3rem}
+.f-sub{font-size:.55rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:1.5rem}
+.f-desc{font-size:.8rem;font-weight:400;line-height:1.8;color:rgba(255,255,255,.22);max-width:280px}
+.f-col-h{font-size:.58rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:1.5rem}
+.f-list{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.f-list a{font-size:.82rem;font-weight:400;color:rgba(255,255,255,.32);transition:color .2s,padding-left .2s;display:block}
+.f-list a:hover{color:#fff;padding-left:.3rem}
+.foot-bot{
+  padding:1.8rem 3.5vw;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.foot-bot p{font-size:.68rem;font-weight:400;color:rgba(255,255,255,.18)}
+.foot-bot-r{display:flex;gap:2.5rem}
+.foot-bot-r a{font-size:.65rem;font-weight:400;color:rgba(255,255,255,.18);transition:color .2s}
+.foot-bot-r a:hover{color:rgba(255,255,255,.7)}
+
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .85s var(--E),transform .85s var(--E)}
+.rv.on{opacity:1;transform:none}
+.rvl{transform:translateX(-24px)}.rvl.on{transform:none}
+.rvr{transform:translateX(24px)}.rvr.on{transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1100px){
+  #om,#miljo,#beliggenhet,.k-hero,.k-form-wrap{grid-template-columns:1fr}
+  .om-r{min-height:50vw}
+  .miljo-r{grid-template-columns:1fr 1fr}
+  .band{grid-template-columns:1fr 1fr}
+  .sc6{grid-column:span 12}
+  .sc4{grid-column:span 6}
+  .sc3{grid-column:span 6}
+  .sc12{grid-column:span 12;grid-template-columns:1fr}
+  .sc12-col{border-right:none;border-bottom:1px solid var(--RULE)}
+  .sc12-col:last-child{border-bottom:none}
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  #nav{padding:0 1.5rem}.nlinks{display:none}
+  #hero{padding:0 1.5rem 4rem}.hero-statrow{flex-wrap:wrap}.hs{padding:1rem 1.5rem}
+  .band{grid-template-columns:1fr}
+  .om-l,.miljo-l,.bel-l{padding:4rem 1.5rem}
+  .om-feats{grid-template-columns:1fr}
+  .miljo-r{grid-template-columns:1fr}.mq{border-right:none!important}
+  .store-hdr{flex-direction:column;align-items:flex-start}
+  #butikker{padding:4rem 1.5rem}
+  .sc4,.sc3{grid-column:span 12}
+  .kfr{grid-template-columns:1fr}
+  .k-hero{padding:4rem 1.5rem;grid-template-columns:1fr;gap:3rem}
+  .k-form-wrap{padding:4rem 1.5rem;gap:3rem}
+  .foot-top{grid-template-columns:1fr;padding:3rem 1.5rem}
+  .foot-bot{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div id="dot"></div>
+<div id="ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="load-title">
+    <span><i>BAMBLE</i></span>
+    <span><i>HANDELS</i></span>
+    <span><i>PARK</i></span>
+  </div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nlogo">
+    <div class="nlogo-a">Bamble Handelspark</div>
+    <div class="nlogo-b">Langrønningen · E18 · Telemark</div>
+  </div>
+  <div class="nlinks">
+    <a href="#om">Om parken</a>
+    <a href="#butikker">Butikker</a>
+    <a href="#miljo">Miljø</a>
+    <a href="#beliggenhet">Beliggenhet</a>
+    <a href="#kontakt" class="ncta">Etabler deg</a>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section id="hero">
+  <div class="hero-rules">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="hero-bg-text">BHP</div>
+  <div class="hero-vline"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">
+      <div class="hero-kicker-line"></div>
+      <span>E18 Bamble · Åpnet 2021 · 10 etablerte aktører</span>
+    </div>
+    <h1 class="hero-h1">
+      <span class="line"><span>BAMBLE</span></span>
+      <span class="line"><span>HANDELS-</span></span>
+      <span class="line"><span>PARK</span></span>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Midt i E18-korridoren mellom Oslo og Kristiansand — et kraftsenter for moderne handel med over én million besøkende.</p>
+      <div class="hero-statrow">
+        <div class="hs"><div class="hsn">270</div><div class="hsl">Mål areal</div></div>
+        <div class="hs"><div class="hsn">1M+</div><div class="hsl">Besøkende</div></div>
+        <div class="hs"><div class="hsn">251k</div><div class="hsl">Nedslagsfelt</div></div>
+        <div class="hs"><div class="hsn">10</div><div class="hsl">Aktører</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hs-track"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Biltema</span><span class="sep">—</span><span>JYSK</span><span class="sep">—</span><span>Elkjøp</span><span class="sep">—</span><span>Megaflis</span><span class="sep">—</span><span>thansen</span><span class="sep">—</span><span>Byggmax</span><span class="sep">—</span><span>Rusta</span><span class="sep">—</span><span>Europris</span><span class="sep">—</span><span>Burger King</span><span class="sep">—</span><span>Circle K E18</span><span class="sep">—</span><span>Bamble Handelspark</span><span class="sep">—</span>
+    <span>Biltema</span><span class="sep">—</span><span>JYSK</span><span class="sep">—</span><span>Elkjøp</span><span class="sep">—</span><span>Megaflis</span><span class="sep">—</span><span>thansen</span><span class="sep">—</span><span>Byggmax</span><span class="sep">—</span><span>Rusta</span><span class="sep">—</span><span>Europris</span><span class="sep">—</span><span>Burger King</span><span class="sep">—</span><span>Circle K E18</span><span class="sep">—</span><span>Bamble Handelspark</span><span class="sep">—</span>
+  </div>
+</div>
+
+<!-- FACTS BAND -->
+<div class="band">
+  <div class="bc rv"><div class="bc-n">270</div><div class="bc-t">Mål godkjent areal</div><div class="bc-d">Regulert til handel, industri, næring og bevertning</div></div>
+  <div class="bc rv d1"><div class="bc-n">1M+</div><div class="bc-t">Besøkende</div><div class="bc-d">Over én million gjester siden åpning</div></div>
+  <div class="bc rv d2"><div class="bc-n">251 000</div><div class="bc-t">Innbyggere i nedslagsfelt</div><div class="bc-d">Fra Grenland til Larvik, Kragerø og Drangedal</div></div>
+  <div class="bc rv d3"><div class="bc-n">13 500</div><div class="bc-t">Hytter i skjærgården</div><div class="bc-d">Sesongtrafikk fra Bamble og Kragerø passerer Langrønningen</div></div>
+</div>
+
+<!-- ════ OM PARKEN ════ -->
+<section id="om">
+  <div class="om-l rv rvl">
+    <div class="slabel"><div class="slabel-bar"></div>Om Bamble Handelspark</div>
+    <h2 class="sh">Et nærings&shy;område bygget for fremtiden</h2>
+    <p>Bamble Handelspark ligger på Langrønningen — rett ved den nye firefelts E18 som åpnet i desember 2019 med egen avkjørsel til handelsparken. Utviklingen startet for over ti år siden og resulterte i et godkjent næringsareal på 270 mål.</p>
+    <p>Fra Langrønningen er det korte avstander til Grenland, Larvik, Sandefjord, Kragerø, Risør og Drangedal. Over 251 000 innbyggere og 13 500 hytter i skjærgården inngår i nedslagsfeltet.</p>
+    <div class="om-feats">
+      <!-- E18 icon -->
+      <div class="omf">
+        <svg class="omf-icon" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 16h24M16 4l12 12-12 12"/><circle cx="16" cy="16" r="2" fill="#fff" stroke="none"/>
+        </svg>
+        <div class="omf-t">E18-avkjørsel</div>
+        <div class="omf-d">Direkte avkjørsel fra firefelts motorvei</div>
+      </div>
+      <!-- Parking icon -->
+      <div class="omf">
+        <svg class="omf-icon" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="24" height="24" rx="1"/>
+          <path d="M11 22V10h6a5 5 0 010 10h-6"/>
+        </svg>
+        <div class="omf-t">Gratis parkering</div>
+        <div class="omf-d">Romslig areal for bil, buss og tilhenger</div>
+      </div>
+      <!-- EV charging icon -->
+      <div class="omf">
+        <svg class="omf-icon" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 4l-8 14h8l-8 10"/>
+          <path d="M26 10v4M28 12h-4" stroke-width="2"/>
+        </svg>
+        <div class="omf-t">El-billading</div>
+        <div class="omf-d">Hurtiglading tilgjengelig på området</div>
+      </div>
+      <!-- Sustainability icon -->
+      <div class="omf">
+        <svg class="omf-icon" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 28c0-10 6-16 14-18"/>
+          <path d="M20 10c4 4 4 10 0 14"/>
+          <circle cx="20" cy="8" r="3"/>
+          <path d="M10 20c2-4 6-6 10-4"/>
+        </svg>
+        <div class="omf-t">Bærekraft</div>
+        <div class="omf-d">BREEAM-NOR sertifisering og solceller</div>
+      </div>
+    </div>
+  </div>
+  <div class="om-r rv rvr">
+    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=85" alt="Bamble Handelspark"/>
+    <div class="om-r-badge">
+      <div class="om-r-badge-n">10</div>
+      <div class="om-r-badge-l">Etablerte aktører</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ BUTIKKER ════ -->
+<section id="butikker">
+  <div class="store-hdr rv">
+    <div>
+      <div class="slabel"><div class="slabel-bar"></div>Etablerte aktører</div>
+      <h2 class="sh">Butikker &amp;<br>tjenester</h2>
+    </div>
+    <p class="store-hdr-note">Norges sterkeste butikkjeder samlet på Langrønningen — rett ved E18 med gratis parkering og enkel tilgjengelighet.</p>
+  </div>
+
+  <div class="sg">
+
+    <!-- Circle K full width -->
+    <div class="sc sc12 rv">
+      <div class="sc12-col">
+        <div class="sc-cat">Veiservice · Drivstoff · El-lading</div>
+        <div class="sc-name" style="font-size:2.8rem">Circle K<br><span style="opacity:.4">E18 Bamble</span></div>
+        <div class="sc-sub" style="margin-bottom:1.5rem">Et av Norges største veiserviceanlegg</div>
+        <div class="live"><div class="live-dot"></div><span class="live-txt">Åpent 24 timer — 365 dager</span></div>
+      </div>
+      <div class="sc12-col">
+        <div class="sc-cat" style="margin-bottom:1.2rem">Adresse</div>
+        <div class="sc-addr" style="margin-bottom:1.8rem"><strong>Europaveien 1551</strong>, 3967 Stathelle<br>Tlf: 47 68 60 46</div>
+        <div class="hours">
+          <span class="hd">Alle dager</span><span class="ht">Døgnåpent</span>
+        </div>
+      </div>
+      <div class="sc12-col">
+        <div class="sc-cat" style="margin-bottom:1.2rem">Fasiliteter</div>
+        <div class="chips">
+          <span class="chip">Hurtiglader</span>
+          <span class="chip">Truckdiesel</span>
+          <span class="chip">AdBlue</span>
+          <span class="chip">Dusj</span>
+          <span class="chip">Lastebilparkering</span>
+          <span class="chip">Truckers Club</span>
+          <span class="chip">WiFi</span>
+          <span class="chip">Tilhengerplass</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 Biltema -->
+    <div class="sc sc6 rv">
+      <div class="sc-num">01</div>
+      <div class="sc-cat">Bil · Fritid · Verktøy · Båt</div>
+      <div class="sc-name">Biltema</div>
+      <div class="sc-sub">Alt til bil, MC, båt, sport og hjem</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 2</strong>, 3967 Stathelle · bamble@biltema.com</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">08:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">09:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+      <div class="chips"><span class="chip">Biltema Café</span><span class="chip">Henger-plass</span></div>
+    </div>
+
+    <!-- 02 JYSK -->
+    <div class="sc sc6 rv d1">
+      <div class="sc-num">02</div>
+      <div class="sc-cat">Møbler · Senger · Interiør</div>
+      <div class="sc-name">JYSK</div>
+      <div class="sc-sub">Senger, møbler, sengetøy og hage</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 6</strong>, 3967 Stathelle</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">10:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">10:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+      <div class="chips"><span class="chip">Levering</span><span class="chip">Click &amp; Collect</span></div>
+    </div>
+
+    <!-- 03 Elkjøp -->
+    <div class="sc sc4 rv">
+      <div class="sc-num">03</div>
+      <div class="sc-cat">Elektronikk · Hvitevarer</div>
+      <div class="sc-name">Elkjøp</div>
+      <div class="sc-sub">Elektronikk, hvitevarer, kjøkken</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 8</strong>, 3967 Stathelle</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">10:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">10:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+      <div class="chips"><span class="chip">Gamingsenter</span><span class="chip">Epoq kjøkken</span><span class="chip">Outlet</span></div>
+    </div>
+
+    <!-- 04 Megaflis -->
+    <div class="sc sc4 rv d1">
+      <div class="sc-num">04</div>
+      <div class="sc-cat">Fliser · VVS · Hage</div>
+      <div class="sc-name">Megaflis</div>
+      <div class="sc-sub">5 800 m² — 9 000+ produkter</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 4</strong>, 3967 Stathelle<br>Tlf: 35 11 15 80</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">09:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">10:00–16:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+      <div class="chips"><span class="chip">Solceller</span><span class="chip">PLUSS-bygg</span></div>
+    </div>
+
+    <!-- 05 thansen -->
+    <div class="sc sc4 rv d2">
+      <div class="sc-num">05</div>
+      <div class="sc-cat">Bil · Sport · Camping</div>
+      <div class="sc-name">thansen</div>
+      <div class="sc-sub">Bil, sport, camping og marineutstyr</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 4</strong>, 3967 Stathelle</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">09:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">10:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+      <div class="chips"><span class="chip">Verkstedslift</span><span class="chip">Dekkmontering</span></div>
+    </div>
+
+    <!-- 06 Byggmax -->
+    <div class="sc sc3 rv">
+      <div class="sc-num">06</div>
+      <div class="sc-cat">Byggevarer · Tre</div>
+      <div class="sc-name">Byggmax</div>
+      <div class="sc-sub">Byggevarer til lavest pris</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen</strong>, 3967 Stathelle</div>
+      <div class="hours">
+        <span class="hd">Man–Fre</span><span class="ht">08:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">09:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+    </div>
+
+    <!-- 07 Rusta -->
+    <div class="sc sc3 rv d1">
+      <div class="sc-num">07</div>
+      <div class="sc-cat">Interiør · Hage · Klær</div>
+      <div class="sc-name">Rusta</div>
+      <div class="sc-sub">Interiør, tekstil og hage</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 12</strong>, 3967 Stathelle</div>
+      <div class="hours">
+        <span class="hd">Hverdager</span><span class="ht">10:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">10:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+    </div>
+
+    <!-- 08 Europris -->
+    <div class="sc sc3 rv d2">
+      <div class="sc-num">08</div>
+      <div class="sc-cat">Dagligvarer · Hjem</div>
+      <div class="sc-name">Europris</div>
+      <div class="sc-sub">Lave priser på dagligvarer og mer</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 16</strong>, 3967 Stathelle<br>Tlf: 35 97 69 20</div>
+      <div class="hours">
+        <span class="hd">Hverdager</span><span class="ht">09:00–20:00</span>
+        <span class="hd">Lørdag</span><span class="ht">09:00–18:00</span>
+        <span class="hd">Søndag</span><span class="ht c">Stengt</span>
+      </div>
+    </div>
+
+    <!-- 09 Burger King -->
+    <div class="sc sc3 rv d3">
+      <div class="sc-num">09</div>
+      <div class="sc-cat">Restaurant</div>
+      <div class="sc-name">Burger King</div>
+      <div class="sc-sub">Home of the Whopper®</div>
+      <div class="sc-hr"></div>
+      <div class="sc-addr"><strong>Langrønningen 3</strong>, 3967 Stathelle<br>Tlf: 922 56 564</div>
+      <div class="hours">
+        <span class="hd">Åpent til</span><span class="ht">22:00</span>
+      </div>
+      <div class="chips"><span class="chip">Drive-through</span><span class="chip">Familierestaurant</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ MILJØ ════ -->
+<section id="miljo">
+  <div class="miljo-l rv rvl">
+    <div class="slabel"><div class="slabel-bar"></div>Miljø &amp; bærekraft</div>
+    <h2 class="sh">Skandinavias mest energivennlige handelspark</h2>
+    <br>
+    <p>Bamble Handelspark setter nye standarder for bærekraftig næringsutvikling. Flere bygninger planlegges BREEAM-NOR sertifisert med brønnparker og solcelleanlegg. Megaflis er det første varehuset med mål om å bli et PLUSS-bygg — som produserer mer energi enn det bruker.</p>
+  </div>
+  <div class="miljo-r rv rvr">
+    <!-- Solar -->
+    <div class="mq">
+      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round">
+        <circle cx="18" cy="18" r="6"/><line x1="18" y1="4" x2="18" y2="8"/><line x1="18" y1="28" x2="18" y2="32"/><line x1="4" y1="18" x2="8" y2="18"/><line x1="28" y1="18" x2="32" y2="18"/><line x1="7.8" y1="7.8" x2="10.6" y2="10.6"/><line x1="25.4" y1="25.4" x2="28.2" y2="28.2"/><line x1="28.2" y1="7.8" x2="25.4" y2="10.6"/><line x1="10.6" y1="25.4" x2="7.8" y2="28.2"/>
+      </svg>
+      <div class="mq-n">PLUSS</div>
+      <div class="mq-t">Energibygg</div>
+      <div class="mq-d">Produserer mer energi enn det bruker</div>
+    </div>
+    <!-- Leaf -->
+    <div class="mq">
+      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 30c0-12 6-20 18-22 0 12-6 20-18 22z"/><path d="M6 30c4-4 8-8 14-12"/>
+      </svg>
+      <div class="mq-n">BREEAM</div>
+      <div class="mq-t">Sertifisering</div>
+      <div class="mq-d">Internasjonalt miljøklassifiseringssystem</div>
+    </div>
+    <!-- EV bolt -->
+    <div class="mq">
+      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 4L10 20h10L15 32"/><path d="M28 10v5M30.5 12.5h-5" stroke-width="2"/>
+      </svg>
+      <div class="mq-n">100%</div>
+      <div class="mq-t">El-lading</div>
+      <div class="mq-d">Hurtiglading for alle besøkende</div>
+    </div>
+    <!-- Recycle arrows -->
+    <div class="mq">
+      <svg class="mq-icon" viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6l4 7h-8l4-7z"/><path d="M28 24l-4-7 4-7"/><path d="M8 24l4-7-4-7"/><path d="M14 30h8M10 28l4 2-2 4"/><path d="M26 28l-4 2 2 4"/>
+      </svg>
+      <div class="mq-n">→ 0</div>
+      <div class="mq-t">CO₂-mål</div>
+      <div class="mq-d">Ambisjon om karbonnøytral drift</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ BELIGGENHET ════ -->
+<section id="beliggenhet">
+  <div class="bel-l rv rvl">
+    <div class="slabel"><div class="slabel-bar"></div>Beliggenhet</div>
+    <h2 class="sh">Midt i E18-korridoren</h2>
+    <p>Med egen avkjørsel fra firefelts E18 er Bamble Handelspark det naturlige stoppstedet for alle som reiser mellom Oslo og Kristiansand.</p>
+    <div class="bl-list">
+      <div class="bli"><div class="bli-n">270</div><div><div class="bli-t">Mål godkjent areal</div><div class="bli-d">Handel, industri, næring og motell</div></div></div>
+      <div class="bli"><div class="bli-n">251k</div><div><div class="bli-t">Innbyggere i nedslagsfelt</div><div class="bli-d">Grenland, Larvik, Sandefjord, Kragerø, Drangedal</div></div></div>
+      <div class="bli"><div class="bli-n">13,5k</div><div><div class="bli-t">Hytter i skjærgården</div><div class="bli-d">Sesongtrafikk fra Porsgrunn, Bamble og Kragerø</div></div></div>
+      <div class="bli"><div class="bli-n">2019</div><div><div class="bli-t">Ny E18 åpnet</div><div class="bli-d">Firefelts motorvei med direkte avkjørsel</div></div></div>
+    </div>
+  </div>
+  <div class="bel-r rv rvr">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4192.0!2d9.519!3d58.973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46460b7de8dcf47b%3A0x6b7fe13bb0e75c37!2sLangr%C3%B8nningen%2C%203967%20Stathelle!5e0!3m2!1sno!2sno!4v1700000000000!5m2!1sno!2sno"
+      allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="map-strip">
+      <span>Langrønningen · 3967 Stathelle</span>
+      <strong>E18 Bamble</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ════ KONTAKT ════ -->
+<section id="kontakt">
+  <div class="k-hero">
+    <div class="rv rvl">
+      <div class="slabel"><div class="slabel-bar"></div>Er du vår neste aktør?</div>
+      <h2 class="sh">Etabler deg på Bamble Handelspark</h2>
+      <br>
+      <p>Bamble Handelspark fortsetter å vokse. Ta kontakt for informasjon om ledige tomter og hva Langrønningen kan tilby din virksomhet — midt i E18-korridoren.</p>
+    </div>
+    <div class="k-facts rv rvr">
+      <div class="k-row"><div class="k-lbl">Adresse</div><div class="k-val">Langrønningen, 3967 Stathelle</div></div>
+      <div class="k-row"><div class="k-lbl">Nettsted</div><div class="k-val">bamblehandelspark.no</div></div>
+      <div class="k-row"><div class="k-lbl">Areal</div><div class="k-val">270 mål — plass til vekst</div></div>
+      <div class="k-row"><div class="k-lbl">E18</div><div class="k-val">Avkjørsel åpnet desember 2019</div></div>
+    </div>
+  </div>
+
+  <div class="k-form-wrap">
+    <div class="rv">
+      <div class="k-form-title">Send oss<br>en melding</div>
+      <div class="k-form-sub">Vi svarer innen én arbeidsdag.</div>
+      <div class="kform">
+        <div class="kfr">
+          <div class="kfg"><label class="kflabel">Navn</label><input class="kfinput" type="text" placeholder="Ditt fulle navn"/></div>
+          <div class="kfg"><label class="kflabel">E-post</label><input class="kfinput" type="email" placeholder="din@epost.no"/></div>
+        </div>
+        <div class="kfr">
+          <div class="kfg"><label class="kflabel">Telefon</label><input class="kfinput" type="tel" placeholder="+47 xxx xx xxx"/></div>
+          <div class="kfg">
+            <label class="kflabel">Gjelder</label>
+            <select class="kfinput kfsel">
+              <option value="" disabled selected>Velg kategori</option>
+              <option>Ledige tomter</option>
+              <option>Næringsinformasjon</option>
+              <option>Generell forespørsel</option>
+            </select>
+          </div>
+        </div>
+        <div class="kfg"><label class="kflabel">Melding</label><textarea class="kfinput kfta" placeholder="Beskriv din henvendelse..."></textarea></div>
+        <button class="k-btn">
+          Send melding
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="kinfo rv d2">
+      <div>
+        <div class="ki-lbl">Adresse</div>
+        <div class="ki-big">Langrønningen</div>
+        <div class="ki-val">3967 Stathelle, Bamble</div>
+      </div>
+      <div class="ki-rule"></div>
+      <div>
+        <div class="ki-lbl">Veibeskrivelse</div>
+        <div class="ki-val">Ta av ved Langrønningen-avkjørselen fra E18. Ca. 1,5 time fra Oslo, 2,5 timer fra Kristiansand.</div>
+      </div>
+      <div class="ki-rule"></div>
+      <div class="ki-list">
+        <!-- parking icon -->
+        <div class="ki-li">
+          <svg class="ki-li-icon" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="22" height="22" rx="1"/>
+            <path d="M9 20V8h6a4 4 0 010 8H9"/>
+          </svg>
+          <span class="ki-li-text">Gratis og romslig parkering for bil, tilhenger og lastebil</span>
+        </div>
+        <!-- bolt icon -->
+        <div class="ki-li">
+          <svg class="ki-li-icon" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3L8 16h8L12 25"/>
+          </svg>
+          <span class="ki-li-text">Hurtiglading for elbil tilgjengelig på området</span>
+        </div>
+        <!-- leaf icon -->
+        <div class="ki-li">
+          <svg class="ki-li-icon" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 23c0-9 5-15 14-17 0 9-5 15-14 17z"/>
+            <path d="M5 23c3-3 6-6 11-9"/>
+          </svg>
+          <span class="ki-li-text">BREEAM-sertifisert bygningsmasse — Skandinavias mest energivennlige</span>
+        </div>
+        <!-- clock icon -->
+        <div class="ki-li">
+          <svg class="ki-li-icon" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round">
+            <circle cx="14" cy="14" r="10"/>
+            <path d="M14 8v6l4 3"/>
+          </svg>
+          <span class="ki-li-text">Circle K åpent 24/7 — øvrige butikker hverdager til 20:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div>
+      <div class="f-logo">Bamble Handelspark</div>
+      <div class="f-sub">Langrønningen · E18 · Telemark</div>
+      <p class="f-desc">Norges mest moderne handelspark — rett ved E18 i Bamble, med ti etablerte aktører og plass til vekst.</p>
+    </div>
+    <div>
+      <div class="f-col-h">Butikker</div>
+      <ul class="f-list">
+        <li><a href="#butikker">Biltema</a></li>
+        <li><a href="#butikker">JYSK</a></li>
+        <li><a href="#butikker">Elkjøp</a></li>
+        <li><a href="#butikker">Megaflis</a></li>
+        <li><a href="#butikker">thansen</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Mer</div>
+      <ul class="f-list">
+        <li><a href="#butikker">Byggmax</a></li>
+        <li><a href="#butikker">Rusta</a></li>
+        <li><a href="#butikker">Europris</a></li>
+        <li><a href="#butikker">Burger King</a></li>
+        <li><a href="#butikker">Circle K</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Informasjon</div>
+      <ul class="f-list">
+        <li><a href="#om">Om parken</a></li>
+        <li><a href="#miljo">Miljø</a></li>
+        <li><a href="#beliggenhet">Beliggenhet</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#kontakt">Ledige tomter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <p>© 2025 Bamble Handelspark AS · Langrønningen · 3967 Stathelle</p>
+    <div class="foot-bot-r">
+      <a href="#">Personvern</a>
+      <a href="#">Cookies</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=-100,my=-100,rx=-100,ry=-100;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function loop(){
+  dot.style.cssText=`left:${mx}px;top:${my}px`;
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.cssText=`left:${rx}px;top:${ry}px`;
+  requestAnimationFrame(loop);
+})();
+
+// Loader
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('gone'),1600);
+});
+
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>60),{passive:true});
+
+// Reveal
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
